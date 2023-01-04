@@ -824,7 +824,7 @@ function exportCSV(&$inventory) {
         $reshook=$hookmanager->executeHooks('printExportColumnContent',$parameters, $inventory);    // Note that $action and $object may have been modified by hook
         if ($reshook < 0) dol_print_error($db, $hookmanager->error, $hookmanager->errors);
 
-        echo '"'.implode('";"', $row).'"'."\r\n";
+		echo '"'.implode('";"', str_replace('"', '""', $row)).'"'."\r\n";
 
 	}
 
