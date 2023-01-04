@@ -809,7 +809,7 @@ function exportCSV(&$inventory) {
 		}
 
 
-		echo '"'.implode('";"', $row).'"'."\r\n";
+		echo '"'.implode('";"', str_replace('"', '""', $row)).'"'."\r\n";
 
 	}
 
