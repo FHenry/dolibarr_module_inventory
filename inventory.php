@@ -86,6 +86,7 @@ function _action()
             $fk_supplier = (int)GETPOST('fk_supplier','int');
             $fk_warehouse = (int)GETPOST('fk_warehouse','int');
 			$only_prods_in_stock = (int)GETPOST('OnlyProdsInStock','int');
+			$always_prods_with_negativ_stock = (int)GETPOST('AlwaysProdsWithNegativStock','int');
 			$inventoryWithBatchDetail = (int)GETPOST('inventoryWithBatchDetail','int');
 			$inventory->per_batch = $inventoryWithBatchDetail;
 
@@ -112,14 +113,18 @@ function _action()
 			if (is_array($fk_category) && !empty($fk_category)) $sql.= ' AND cp.fk_categorie IN ('.implode(',',$fk_category).')';
 			if ($fk_supplier > 0) $sql.= ' AND pfp.fk_soc = '.$fk_supplier;
 
-			$parameters=array('fk_category'=>$fk_category, 'fk_supplier' => $fk_supplier, 'only_prods_in_stock' => $only_prods_in_stock);
+			$parameters=array('fk_category'=>$fk_category, 'fk_supplier' => $fk_supplier, 'only_prods_in_stock' => $only_prods_in_stock, 'always_prods_with_negativ_stock' => $always_prods_with_negativ_stock);
 			$reshook=$hookmanager->executeHooks('printFieldListWhere',$parameters,$inventory,$action);    // Note that $action and $object may have been modified by some hooks
 			if ($reshook < 0) setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 			else $sql.=$hookmanager->resPrint;
 
 			$sql.= ' GROUP BY p.rowid, sm.fk_entrepot';
 
-			if ($only_prods_in_stock > 0) $sql.= ' HAVING qty > 0';
+			if ($always_prods_with_negativ_stock > 0 && $only_prods_in_stock > 0)  {
+				$sql.= ' HAVING qty <> 0';
+			} elseif ($only_prods_in_stock > 0)  {
+				$sql.= ' HAVING qty > 0';
+			}
 
 			$sql.= ' ORDER BY p.ref ASC, p.label ASC';
 
@@ -462,6 +467,10 @@ function _fiche_warehouse(&$PDOdb, &$user, &$db, &$conf, $langs, $inventory)
         <tr>
             <td><?php echo $langs->trans('OnlyProdsInStock') ?></td>
             <td><input type="checkbox" name="OnlyProdsInStock" value="1"></td>
+        </tr>
+		 <tr>
+            <td><?php echo $langs->trans('AlwaysProdsWithNegativStock') ?></td>
+            <td><input type="checkbox" name="AlwaysProdsWithNegativStock" value="1"></td>
         </tr>
 
         <tr>

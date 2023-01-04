@@ -38,6 +38,7 @@ INVENTORY_NB_PRODUCT_IN_SELECT=Nombre de produit visible dans la liste déroulan
 inventoryChangePMPPermission=Changer la valeur du PMP d'un produit
 ColumnNewPMP=Nouveau PMP
 OnlyProdsInStock=Ne pas intégrer les produits qui n'ont pas de stock dans l'entrepôt sélectionné
+AlwaysProdsWithNegativStock=Intégrer les articles qui ont un stock négatif
 IncludeProdWithCurrentStockValue=Intégrer les produits avec leur stock actuel et PMP
 INVENTORY_USE_MIN_PA_OR_LAST_PA_MIN_PMP_IS_NULL=Utiliser le dernier prix d'achat ou le minimal pour PMP en cas de PMP nul
 UsePAifnull=Utilise le prix d'achat si null
